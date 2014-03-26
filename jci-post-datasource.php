@@ -19,7 +19,7 @@ class JCI_Post_Datasource{
         add_action( 'jci/output_datasource_option', array($this, 'add_datasource_option'));
         add_action( 'jci/output_datasource_section', array($this, 'output_create_form'));
 
-		add_action( 'jci/output_edit_section', array($this, 'output_edit_form'), 10, 2);
+		add_action( 'jci/importer_setting_section', array($this, 'output_edit_form'), 10);
 
 		// run post
 		add_filter( 'rewrite_rules_array', array( $this , 'rewrite_url' ) );
@@ -124,19 +124,23 @@ class JCI_Post_Datasource{
 
 	/**
 	 * Display Edit Section
-	 * @param  integer $id            
-	 * @param  string $importer_type 
 	 * @return void
 	 */
-	public function output_edit_form($id, $importer_type){
-		if($importer_type !== 'post')
+	public function output_edit_form(){
+
+		global $jcimporter;
+		$id = $jcimporter->importer->get_ID();
+		$import_type = $jcimporter->importer->get_import_type();
+
+		if($import_type != 'post')
 			return;
+
 		?>
 		<div class="jci-group-post jci-group-section" data-section-id="post">
 			<div class="post_settings">
 				<h4>Post Settings</h4>
 				<?php
-				$post_settings = ImporterModel::getImportSettings($id, 'post');
+				$post_settings = ImporterModel::getImporterMetaArr($id, array('_import_settings', 'general'));
 
 				if ( get_option('permalink_structure') ) {
 					echo site_url( '/jcimporter/'.$id.'/'.$post_settings['post_key'] );
