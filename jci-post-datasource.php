@@ -3,7 +3,7 @@
 Plugin Name: JC Importer - Post Datasource
 Description: Add Post Datasource to JC Importer
 Author: James Collings <james@jclabs.co.uk>
-Version: 0.0.1
+Version: 0.0.2
 */
 		
 class JCI_Post_Datasource{
@@ -204,13 +204,13 @@ class JCI_Post_Datasource{
 
                         // POSTED FILE
                         $attach = new JC_Upload_Attachments();
-                        $result = $attach->attach_upload( $importer_id, $_FILES[$field]);
+                        $result = $attach->attach_upload( $importer_id, $_FILES[$field], array('importer-file' => true));
 
                     }elseif($field_type == 'post' && isset($_POST[$field])){
 
                         // POSTED STRING
                         $attach = new JC_String_Attachments();
-                        $result = $attach->attach_string($importer_id, $_POST[$field]);
+                        $result = $attach->attach_string($importer_id, $_POST[$field], null, array('importer-file' => true));
                     }
                     
                     $settings['import_file'] = $result['id'];
